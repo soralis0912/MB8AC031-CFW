@@ -1,0 +1,68 @@
+{
+  "id": "dt295",
+  "name": "PIXELA PIX-DT295",
+  "usb": "06B8:103B",
+  "evidence": "measured",
+  "i2c": "fujitsu-fd8f",
+  "demod": {
+    "driver": "tc9052x",
+    "part": "TC90532XBG",
+    "module": null,
+    "addr_t": "0x10",
+    "addr_s": "0x11",
+    "addr_t2": null,
+    "addr_s2": null,
+    "evidence": "measured"
+  },
+  "tuner": {
+    "part": "MaxLinear MxL661",
+    "addr": null,
+    "evidence": "inferred"
+  },
+  "tuners": 1,
+  "bands": [
+    {
+      "source": "t",
+      "tuned_by": "host",
+      "lock_seen": true,
+      "record": 188,
+      "lo_khz": 473143,
+      "hi_khz": 767143,
+      "step_hz": 15625
+    },
+    {
+      "source": "s",
+      "tuned_by": "host",
+      "lock_seen": true,
+      "record": 188,
+      "lo_khz": 950000,
+      "hi_khz": 2150000,
+      "step_hz": 1000000
+    }
+  ],
+  "ts": {
+    "in0": "0x06070000",
+    "in1": "0x04000000",
+    "evidence": "measured"
+  },
+  "card": {
+    "slot": true,
+    "polarity": 1,
+    "evidence": "measured"
+  },
+  "loader": {
+    "name": "PIX-DT295",
+    "family": "selene",
+    "hook": "0x000ea6fc",
+    "hook_crc32": "0x61b6d96b",
+    "boot": "0x000e1000",
+    "resume_plain": "0x000ea75a",
+    "resume_mask": "0x000ea704",
+    "complete": "0x000ea8c8",
+    "staging": "0x000c4620",
+    "state": "0x00082008",
+    "base": "0x000e9000",
+    "bytes": "0x3910",
+    "crc32": "0xf6ecc1ab"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "unknown",
+  "name": "no product",
+  "usb": null,
+  "evidence": "measured",
+  "i2c": null,
+  "demod": {
+    "driver": null,
+    "part": null,
+    "module": null,
+    "addr_t": null,
+    "addr_s": null,
+    "addr_t2": null,
+    "addr_s2": null,
+    "evidence": "unknown"
+  },
+  "tuner": {
+    "part": null,
+    "addr": null,
+    "evidence": "unknown"
+  },
+  "tuners": 0,
+  "loader": null
+}

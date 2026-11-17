@@ -1,0 +1,54 @@
+{
+  "id": "m2tv",
+  "name": "I-O DATA GV-M2TV",
+  "usb": "04BB:053A",
+  "evidence": "measured",
+  "i2c": "fujitsu-fd8f",
+  "demod": {
+    "driver": "tc9052x",
+    "part": "TC90517",
+    "module": "Sony SMT-MJ111",
+    "addr_t": "0x18",
+    "addr_s": null,
+    "addr_t2": null,
+    "addr_s2": null,
+    "evidence": "inferred"
+  },
+  "tuner": {
+    "part": "Sony SMT module",
+    "addr": null,
+    "evidence": "unknown"
+  },
+  "tuners": 1,
+  "card": {
+    "slot": true,
+    "polarity": 0,
+    "evidence": "measured"
+  },
+  "bands": [
+    {
+      "source": "t",
+      "tuned_by": "host",
+      "lock_seen": true,
+      "record": 188,
+      "lo_khz": 473143,
+      "hi_khz": 767143,
+      "step_hz": 15625
+    }
+  ],
+  "loader": {
+    "name": "GV-M2TV",
+    "family": "dione",
+    "hook": "0x000e9f80",
+    "hook_crc32": "0x7f484d4a",
+    "boot": "0x000e1000",
+    "resume_plain": "0x000e9fa6",
+    "resume_mask": "0x000e9f8a",
+    "complete": "0x000e9ff0",
+    "staging": "0x000c5000",
+    "state": "0x00082008",
+    "base": "0x000e9000",
+    "bytes": "0x2620",
+    "crc32": "0x76894854"
+  }
+}

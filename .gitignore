@@ -1,0 +1,20 @@
+# Build outputs
+build/
+
+# The four samples (built by make)
+sample/frc1_load
+sample/ts_grab
+sample/arm_probe
+sample/arm_ipc
+
+# Python
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# Containers, the hook bytes frc1_load saves, recordings
+*.frc
+*.frc.hook
+*.ts

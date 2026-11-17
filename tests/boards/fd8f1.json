@@ -1,0 +1,24 @@
+{
+  "id": "fd8f1",
+  "name": "test fixture: selene, 0x00FD8FE0 I2C, one demodulator unit",
+  "usb": "FFFF:0001",
+  "evidence": "unknown",
+  "i2c": "fujitsu-fd8f",
+  "demod": {
+    "driver": "tc9052x",
+    "part": null,
+    "module": null,
+    "addr_t": "0x10",
+    "addr_s": "0x11",
+    "addr_t2": null,
+    "addr_s2": null,
+    "evidence": "unknown"
+  },
+  "tuner": {
+    "part": null,
+    "addr": null,
+    "evidence": "unknown"
+  },
+  "tuners": 1,
+  "loader": null
+}

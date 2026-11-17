@@ -1,0 +1,12 @@
+{
+ "name": "CFW-aux",
+ "base": "0x017a2d00",
+ "link": "src/auxcore/link.ld",
+ "cflags": "-O2 -fno-builtin -ffreestanding -Wall -Wextra -Isrc/shared",
+ "sources": [
+  "src/auxcore/entry.S",
+  "src/auxcore/auxmain.c",
+  "src/shared/fjcore.c"
+ ],
+ "targets": {}
+}

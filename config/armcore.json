@@ -1,0 +1,18 @@
+{
+ "name": "CFW-arm",
+ "base": "0x00e00000",
+ "link": "src/armcore/link.ld",
+ "cflags": "-mcpu=arm926ej-s -marm -mbig-endian -O2 -fno-builtin -ffreestanding -nostdlib -Wall -Wextra -Isrc/shared",
+ "ldflags": "-EB",
+ "asm_cpp": true,
+ "sources": [
+  "src/armcore/vectors.S",
+  "src/armcore/armmain.c",
+  "src/armcore/diag.c",
+  "src/armcore/ipc.c",
+  "src/armcore/svc_sys.c",
+  "src/armcore/svc_watch.c",
+  "src/armcore/svc_card.c"
+ ],
+ "targets": {}
+}

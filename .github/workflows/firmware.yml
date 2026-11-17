@@ -1,0 +1,117 @@
+# Build the firmware (one FRC1 container per board, plus the aux-core and
+# ARM images), run the offline tests, and keep the outputs as an artifact.
+# A tag v* also attaches them to a GitHub release.
+#
+# The fr30-elf and arm-none-eabi toolchains are built from the upstream GNU
+# tarballs by host/ci/toolchain.sh (the recipe in docs/toolchain.md) and
+# cached, so only the first run, or a change of version, pays for that.
+name: firmware
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: firmware-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BINUTILS_VERSION: "2.43.1"
+  GCC_VERSION: "14.2.0"
+  FR30_TOOLCHAIN: /home/runner/opt/fr30-elf
+  ARM_TOOLCHAIN: /home/runner/opt/arm-none-eabi
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore fr30-elf
+        id: fr30
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.FR30_TOOLCHAIN }}
+          key: fr30-elf-${{ runner.os }}-binutils-${{ env.BINUTILS_VERSION }}-gcc-${{ env.GCC_VERSION }}-${{ hashFiles('host/ci/toolchain.sh') }}
+
+      - name: Restore arm-none-eabi
+        id: arm
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.ARM_TOOLCHAIN }}
+          key: arm-none-eabi-${{ runner.os }}-binutils-${{ env.BINUTILS_VERSION }}-gcc-${{ env.GCC_VERSION }}-${{ hashFiles('host/ci/toolchain.sh') }}
+
+      - name: Install what the toolchain build needs
+        if: steps.fr30.outputs.cache-hit != 'true' || steps.arm.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential libgmp-dev libmpfr-dev libmpc-dev zlib1g-dev xz-utils
+
+      - name: Build fr30-elf
+        if: steps.fr30.outputs.cache-hit != 'true'
+        run: WORK=$RUNNER_TEMP/tc host/ci/toolchain.sh fr30-elf "$FR30_TOOLCHAIN"
+
+      - name: Build arm-none-eabi
+        if: steps.arm.outputs.cache-hit != 'true'
+        run: WORK=$RUNNER_TEMP/tc host/ci/toolchain.sh arm-none-eabi "$ARM_TOOLCHAIN"
+
+      - name: Build the firmware
+        run: python3 host/build.py
+
+      - name: Test
+        run: |
+          set -e
+          for t in tests/test_*.py; do
+            echo "::group::$t"
+            python3 "$t"
+            echo "::endgroup::"
+          done
+
+      - name: Collect
+        run: |
+          set -e
+          out=dist/cfw-${GITHUB_REF_NAME//\//-}
+          mkdir -p "$out"
+          cp build/frc1-*.frc build/auxcore.bin build/armcore.bin "$out"/
+          cp build/*.map "$out"/
+          {
+            echo "commit   $GITHUB_SHA"
+            echo "ref      $GITHUB_REF"
+            echo "fr30     $("$FR30_TOOLCHAIN/bin/fr30-elf-gcc" --version | head -n 1)"
+            echo "arm      $("$ARM_TOOLCHAIN/bin/arm-none-eabi-gcc" --version | head -n 1)"
+            echo "binutils $BINUTILS_VERSION"
+          } > "$out/BUILDINFO"
+          (cd "$out" && sha256sum * > SHA256SUMS)
+          cat "$out/BUILDINFO" "$out/SHA256SUMS"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cfw-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: cfw-${{ github.sha }}
+          path: dist
+
+      - name: Attach to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          cd dist/cfw-*
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" \
+            --title "$GITHUB_REF_NAME" --generate-notes \
+            frc1-*.frc auxcore.bin armcore.bin SHA256SUMS BUILDINFO

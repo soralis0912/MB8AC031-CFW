@@ -1,0 +1,41 @@
+{
+ "name": "CFW",
+ "base": "0x80380000",
+ "link": "src/main/link_selene.ld",
+ "cflags": "-O2 -fno-builtin -ffreestanding -Wall -Wextra -Isrc/shared -Isrc/main",
+ "sources": [
+  "src/main/entry.S",
+  "src/main/entry_frc1_selene.S",
+  "src/main/frq1.c",
+  "src/main/device.c",
+  "src/main/probe.c",
+  "src/main/util.c",
+  "src/main/sys.c",
+  "src/main/clk.c",
+  "src/main/gpio.c",
+  "src/main/hif.c",
+  "src/main/i2c.c",
+  "src/main/demod.c",
+  "src/main/fe.c",
+  "src/main/tsif_selene.c",
+  "src/main/ring_selene.c",
+  "src/main/usbep.c",
+  "src/main/tsout_selene.c",
+  "src/main/stream.c",
+  "src/main/ts_dione.c",
+  "src/main/fe_dione.c",
+  "src/main/card.c",
+  "src/main/arm.c",
+  "src/main/arm_dione.c",
+  "src/main/arm_selene.c",
+  "src/main/arm_ipc.c",
+  "src/main/pm.c",
+  "src/main/health.c"
+ ],
+ "targets": {
+  "frc1": {
+   "kind": "frc1-container",
+   "ext": ".frc"
+  }
+ }
+}

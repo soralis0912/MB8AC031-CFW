@@ -1,0 +1,44 @@
+{
+  "evidence_levels": [
+    "measured",
+    "inferred",
+    "unknown"
+  ],
+  "drivers": {
+    "i2c": {
+      "fujitsu-fd8f": {
+        "source": "src/main/i2c/fujitsu.c",
+        "requires": [
+          "src/shared/fjcore.c"
+        ],
+        "ops": "i2c_fujitsu_ops",
+        "evidence": "measured"
+      },
+      "fujitsu-1684": {
+        "source": "src/main/i2c/aux684.c",
+        "requires": [
+          "src/shared/fjcore.c"
+        ],
+        "ops": "i2c_aux684_ops",
+        "evidence": "unknown"
+      },
+      "aux-slot": {
+        "source": "src/main/i2c/auxslot.c",
+        "ops": "i2c_auxslot_ops",
+        "evidence": "measured"
+      },
+      "aux-mailbox": {
+        "source": "src/main/i2c/mailbox.c",
+        "ops": "i2c_mailbox_ops",
+        "evidence": "inferred"
+      }
+    },
+    "demod": {
+      "tc9052x": {
+        "source": "src/main/demod/tc9052x.c",
+        "ops": "demod_tc9052x_ops",
+        "evidence": "inferred"
+      }
+    }
+  }
+}
